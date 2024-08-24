@@ -50,7 +50,8 @@ def get_df_from_silence_txt(output_file):
     return df
     
 def main():
-    path = r'D:\Projects\utilities'
+    path = r'D:\Projects\training_videos'
+    
     orig_file_name = r'Career_Opportunities_In_AI.mp4'
 
     chunk_size = r'00:05:00'
@@ -67,7 +68,7 @@ def main():
 
     # detect_silence(path, file_name = chunk_out_file)
 
-    # detect_silence(path, file_name = orig_file_name)
+    detect_silence(path, file_name = orig_file_name)
 
     silence_file = "silence.txt"
     df = get_df_from_silence_txt(silence_file)

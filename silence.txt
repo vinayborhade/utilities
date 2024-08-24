@@ -1,0 +1,108 @@
+ffmpeg version N-116759-g40dda881d6-20240824 Copyright (c) 2000-2024 the FFmpeg developers
+  built with gcc 14.2.0 (crosstool-NG 1.26.0.106_ed12fa6)
+  configuration: --prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-w64-mingw32- --arch=x86_64 --target-os=mingw32 --enable-gpl --enable-version3 --disable-debug --enable-shared --disable-static --disable-w32threads --enable-pthreads --enable-iconv --enable-zlib --enable-libfreetype --enable-libfribidi --enable-gmp --enable-libxml2 --enable-lzma --enable-fontconfig --enable-libharfbuzz --enable-libvorbis --enable-opencl --disable-libpulse --enable-libvmaf --disable-libxcb --disable-xlib --enable-amf --enable-libaom --enable-libaribb24 --enable-avisynth --enable-chromaprint --enable-libdav1d --enable-libdavs2 --enable-libdvdread --enable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --enable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --enable-librubberband --enable-schannel --enable-sdl2 --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --disable-libdrm --enable-vaapi --enable-libvidstab --enable-vulkan --enable-libshaderc --enable-libplacebo --enable-libvvenc --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs=-lgomp --extra-ldflags=-pthread --extra-ldexeflags= --cc=x86_64-w64-mingw32-gcc --cxx=x86_64-w64-mingw32-g++ --ar=x86_64-w64-mingw32-gcc-ar --ranlib=x86_64-w64-mingw32-gcc-ranlib --nm=x86_64-w64-mingw32-gcc-nm --extra-version=20240824
+  libavutil      59. 34.100 / 59. 34.100
+  libavcodec     61. 11.100 / 61. 11.100
+  libavformat    61.  5.101 / 61.  5.101
+  libavdevice    61.  2.100 / 61.  2.100
+  libavfilter    10.  2.102 / 10.  2.102
+  libswscale      8.  2.100 /  8.  2.100
+  libswresample   5.  2.100 /  5.  2.100
+  libpostproc    58.  2.100 / 58.  2.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'D:\Projects\training_videos\Career_Opportunities_In_AI.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2
+    creation_time   : 2024-08-24T06:38:41.000000Z
+  Duration: 01:04:52.03, start: 0.000000, bitrate: 640 kb/s
+  Stream #0:0[0x2](eng): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1920x1080, 576 kb/s, 16 fps, 16 tbr, 10k tbn (default)
+      Metadata:
+        creation_time   : 2024-08-24T06:38:41.000000Z
+        vendor_id       : [0][0][0][0]
+  Stream #0:1[0x1](eng): Audio: aac (LC) (mp4a / 0x6134706D), 16000 Hz, mono, fltp, 60 kb/s (default)
+      Metadata:
+        creation_time   : 2024-08-24T06:38:41.000000Z
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> wrapped_avframe (native))
+  Stream #0:1 -> #0:1 (aac (native) -> pcm_s16le (native))
+Press [q] to stop, [?] for help
+Output #0, null, to 'pipe:':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2
+    encoder         : Lavf61.5.101
+  Stream #0:0(eng): Video: wrapped_avframe, yuv420p(progressive), 1920x1080, q=2-31, 200 kb/s, 16 fps, 16 tbn (default)
+      Metadata:
+        creation_time   : 2024-08-24T06:38:41.000000Z
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.11.100 wrapped_avframe
+  Stream #0:1(eng): Audio: pcm_s16le, 16000 Hz, mono, s16, 256 kb/s (default)
+      Metadata:
+        creation_time   : 2024-08-24T06:38:41.000000Z
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.11.100 pcm_s16le
+[silencedetect @ 000001c8b2050fc0] silence_start: 0
+[silencedetect @ 000001c8b2050fc0] silence_end: 5.084375 | silence_duration: 5.084375
+[silencedetect @ 000001c8b2050fc0] silence_start: 76.630375
+[silencedetect @ 000001c8b2050fc0] silence_end: 81.986688 | silence_duration: 5.356313
+[silencedetect @ 000001c8b2050fc0] silence_start: 288.221688
+[silencedetect @ 000001c8b2050fc0] silence_end: 291.285438 | silence_duration: 3.06375
+[silencedetect @ 000001c8b2050fc0] silence_start: 310.697625
+[silencedetect @ 000001c8b2050fc0] silence_end: 313.756188 | silence_duration: 3.058562
+[silencedetect @ 000001c8b2050fc0] silence_start: 321.411438
+[silencedetect @ 000001c8b2050fc0] silence_end: 324.684 | silence_duration: 3.272563
+[silencedetect @ 000001c8b2050fc0] silence_start: 326.231313
+[silencedetect @ 000001c8b2050fc0] silence_end: 329.347312 | silence_duration: 3.116
+[silencedetect @ 000001c8b2050fc0] silence_start: 447.661063
+[silencedetect @ 000001c8b2050fc0] silence_end: 451.905188 | silence_duration: 4.244125
+[silencedetect @ 000001c8b2050fc0] silence_start: 463.721875
+[silencedetect @ 000001c8b2050fc0] silence_end: 468.548563 | silence_duration: 4.826688
+[silencedetect @ 000001c8b2050fc0] silence_start: 472.862563
+[silencedetect @ 000001c8b2050fc0] silence_end: 476.343 | silence_duration: 3.480437
+[silencedetect @ 000001c8b2050fc0] silence_start: 484.315375
+[silencedetect @ 000001c8b2050fc0] silence_end: 489.862313 | silence_duration: 5.546938
+[silencedetect @ 000001c8b2050fc0] silence_start: 499.632812
+[silencedetect @ 000001c8b2050fc0] silence_end: 503.256062 | silence_duration: 3.62325
+[silencedetect @ 000001c8b2050fc0] silence_start: 521.163
+[silencedetect @ 000001c8b2050fc0] silence_end: 532.2895 | silence_duration: 11.1265
+[silencedetect @ 000001c8b2050fc0] silence_start: 571.7455
+[silencedetect @ 000001c8b2050fc0] silence_end: 585.647438 | silence_duration: 13.901938
+[silencedetect @ 000001c8b2050fc0] silence_start: 1479.468437
+[silencedetect @ 000001c8b2050fc0] silence_end: 1482.727562 | silence_duration: 3.259125
+[silencedetect @ 000001c8b2050fc0] silence_start: 1487.631813
+[silencedetect @ 000001c8b2050fc0] silence_end: 1490.64425 | silence_duration: 3.012437
+[silencedetect @ 000001c8b2050fc0] silence_start: 2061.197875
+[silencedetect @ 000001c8b2050fc0] silence_end: 2065.494625 | silence_duration: 4.29675
+[silencedetect @ 000001c8b2050fc0] silence_start: 2394.101187
+[silencedetect @ 000001c8b2050fc0] silence_end: 2397.284437 | silence_duration: 3.18325
+[silencedetect @ 000001c8b2050fc0] silence_start: 2879.485312
+[silencedetect @ 000001c8b2050fc0] silence_end: 2882.93775 | silence_duration: 3.452438
+[silencedetect @ 000001c8b2050fc0] silence_start: 3023.48625
+[silencedetect @ 000001c8b2050fc0] silence_end: 3026.624625 | silence_duration: 3.138375
+[silencedetect @ 000001c8b2050fc0] silence_start: 3104.571375
+[silencedetect @ 000001c8b2050fc0] silence_end: 3108.135438 | silence_duration: 3.564062
+[silencedetect @ 000001c8b2050fc0] silence_start: 3192.754063
+[silencedetect @ 000001c8b2050fc0] silence_end: 3196.055 | silence_duration: 3.300937
+[silencedetect @ 000001c8b2050fc0] silence_start: 3509.089812
+[silencedetect @ 000001c8b2050fc0] silence_end: 3512.524688 | silence_duration: 3.434875
+[silencedetect @ 000001c8b2050fc0] silence_start: 3599.5765
+[silencedetect @ 000001c8b2050fc0] silence_end: 3603.166313 | silence_duration: 3.589813
+[silencedetect @ 000001c8b2050fc0] silence_start: 3663.244125
+[silencedetect @ 000001c8b2050fc0] silence_end: 3668.724375 | silence_duration: 5.48025
+[silencedetect @ 000001c8b2050fc0] silence_start: 3679.959875
+[silencedetect @ 000001c8b2050fc0] silence_end: 3682.98275 | silence_duration: 3.022875
+[silencedetect @ 000001c8b2050fc0] silence_start: 3705.835188
+[silencedetect @ 000001c8b2050fc0] silence_end: 3709.226688 | silence_duration: 3.3915
+[silencedetect @ 000001c8b2050fc0] silence_start: 3711.543875
+[silencedetect @ 000001c8b2050fc0] silence_end: 3717.765188 | silence_duration: 6.221312
+[silencedetect @ 000001c8b2050fc0] silence_start: 3729.3125
+[silencedetect @ 000001c8b2050fc0] silence_end: 3736.92925 | silence_duration: 7.61675
+[silencedetect @ 000001c8b2050fc0] silence_start: 3746.384312
+[silencedetect @ 000001c8b2050fc0] silence_end: 3750.774937 | silence_duration: 4.390625
+[silencedetect @ 000001c8b2050fc0] silence_start: 3756.324625
+[silencedetect @ 000001c8b2050fc0] silence_end: 3761.2745 | silence_duration: 4.949875
+[out#0/null @ 000001c8afc412c0] video:26758KiB audio:121626KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=62273 fps=672 q=-0.0 Lsize=N/A time=01:04:52.03 bitrate=N/A speed=  42x    
