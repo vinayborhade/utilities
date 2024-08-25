@@ -19,16 +19,27 @@ def convert_seconds_to_hhmmss(seconds):
     # Format as hh:mm:ss
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
-def cut_video_st_end_time(path, file_name, st_sec, duration, out_file):
+def cut_video_st_duration_time(path, file_name, st_sec, duration, out_file):
 
     # print(out_file, st_sec, duration)
 
     # cuts video to give simgle file for start and end times specified
     if file_name.endswith(".mp4"): 
-        # command = "ffmpeg -ss " + str(st_time) + " -i " + os.path.join(path, file_name) + " -c copy -to "+ str(end_time) + " " + out_file
-        # command = f"ffmpeg -ss {st_sec} -i \"{os.path.join(path, file_name)}\" -t {duration} -c copy \"{out_file}\""
-        command = f"ffmpeg -i \"{os.path.join(path, file_name)}\" -ss {math.floor(st_sec)} -t {math.ceil(duration)} -c copy \"{out_file}\""
+        # command = f"ffmpeg -i \"{os.path.join(path, file_name)}\" -ss {math.floor(st_sec)} -t {math.ceil(duration)} -c copy \"{out_file}\""
+        command = f"ffmpeg -i \"{os.path.join(path, file_name)}\" -ss {math.floor(st_sec)} -t {math.ceil(duration)} -c:v libx264 -c:a aac \"{out_file}\""
     
+        os.system(command)
+
+def cut_video_st_end_time(path, file_name, st_sec, end_sec, out_file):
+
+    # print(out_file, st_sec, end_sec)
+
+    # cuts video to give simgle file for start and end times specified
+    if file_name.endswith(".mp4"): 
+        command = f"ffmpeg -i \"{os.path.join(path, file_name)}\" -ss {str(st_sec)} -to {str(end_sec)} -c copy \"{out_file}\""
+    
+        # command = "ffmpeg -ss " + str(st_sec) + " -i " + os.path.join(path, file_name) + " -c copy -to "+ str(end_sec) + " " + out_file
+        
         os.system(command)
 
 
@@ -126,12 +137,40 @@ def generate_clips_for_non_silence_time(video_path, non_silence_time_df):
         output_file_path = os.path.join(video_path, output_file)
 
         # Call the function to cut the video
-        cut_video_st_end_time(video_path, file_name, start_sec, duration, output_file_path)
+        sleep(1)
+        cut_video_st_duration_time(video_path, file_name, start_sec, duration, output_file_path)
 
+def generate_clips_for_custom_split_time(video_path, custom_split_time_df):
+
+    # Function to convert hh:mm:ss to seconds
+    def time_to_seconds(time_str):
+        h, m, s = map(int, time_str.split(':'))
+        return h * 3600 + m * 60 + s
+
+    # Apply the function to calculate duration
+    custom_split_time_df['start_sec'] = custom_split_time_df['start'].apply(time_to_seconds)
+    custom_split_time_df['end_sec'] = custom_split_time_df['end'].apply(time_to_seconds)
+    custom_split_time_df['duration_sec'] = custom_split_time_df['end_sec'] - custom_split_time_df['start_sec']
+
+    for index, row in custom_split_time_df.iterrows():
+        start_sec = row['start_sec']
+        duration = row['duration_sec']
+        file_name = row['file_name']
+        topic = row['topic']
+
+        
+        # Construct output file name for the clip
+        output_file = f"{topic}.mp4"
+
+        output_file_path = os.path.join(video_path, output_file)    
+        
+        sleep(1)
+        # cut_video_st_end_time(video_path, file_name, start_sec, end_sec, output_file_path)
+        cut_video_st_duration_time(video_path, file_name, start_sec, duration, output_file_path)
 
 
 def main():
-    path = r'D:\Projects\training_videos'
+    path = r'D:\Projects\training_videos\Career_Opportunities_In_AI'
     
     orig_file_name = r'Career_Opportunities_In_AI.mp4'
 
@@ -154,13 +193,17 @@ def main():
     # non_silence_time_df = generate_non_silence_time(orig_file_name)
     # non_silence_time_df.to_csv('non_silence.csv')
 
-    non_silence_csv_path = os.path.join(r'D:\Projects\utilities', r'non_silence.csv')
-    non_silence_time_df = pd.read_csv(non_silence_csv_path)
+    # non_silence_csv_path = os.path.join(r'D:\Projects\utilities', r'non_silence.csv')
+    # non_silence_time_df = pd.read_csv(non_silence_csv_path)
+    # non_silence_time_df['output_file'] = None
+    # video_path = path
+    # generate_clips_for_non_silence_time(video_path, non_silence_time_df)
 
-    non_silence_time_df['output_file'] = None
-
+    custom_split_csv_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'Topics.csv')
+    custom_split_df = pd.read_csv(custom_split_csv_path)
+    custom_split_df['output_file'] = None
     video_path = path
-    generate_clips_for_non_silence_time(video_path, non_silence_time_df)
+    generate_clips_for_custom_split_time(video_path, custom_split_df)
 
 
 
