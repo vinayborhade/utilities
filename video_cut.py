@@ -1,6 +1,8 @@
 import os
+import math
 import pandas as pd
 from time import sleep
+import datetime
 
 def split_entire_video(path, file_name, chunk_size):
     # splits entire video into multiple chunks of intervals specified
@@ -8,11 +10,25 @@ def split_entire_video(path, file_name, chunk_size):
         command = "ffmpeg -fflags +discardcorrupt -i " + os.path.join(path, file_name) + "-vf 'setpts=PTS-STARTPTS+0' -c copy -map 0 -segment_time " + chunk_size +  " -f segment -reset_timestamps 1 " + os.path.join(path, "output%03d.mp4")
         os.system(command)
 
-def cut_video_st_end_time(path, file_name, st, end, out_file):
+def convert_seconds_to_hhmmss(seconds):
+    td = datetime.timedelta(seconds=seconds)
+    # Extract hours, minutes, and seconds from the timedelta object
+    total_seconds = int(td.total_seconds())
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    # Format as hh:mm:ss
+    return f"{hours:02}:{minutes:02}:{seconds:02}"
+
+def cut_video_st_end_time(path, file_name, st_sec, duration, out_file):
+
+    # print(out_file, st_sec, duration)
 
     # cuts video to give simgle file for start and end times specified
     if file_name.endswith(".mp4"): 
-        command = "ffmpeg -ss " + st + " -i " + os.path.join(path, file_name) + " -c copy -to "+ end + " " + out_file
+        # command = "ffmpeg -ss " + str(st_time) + " -i " + os.path.join(path, file_name) + " -c copy -to "+ str(end_time) + " " + out_file
+        # command = f"ffmpeg -ss {st_sec} -i \"{os.path.join(path, file_name)}\" -t {duration} -c copy \"{out_file}\""
+        command = f"ffmpeg -i \"{os.path.join(path, file_name)}\" -ss {math.floor(st_sec)} -t {math.ceil(duration)} -c copy \"{out_file}\""
+    
         os.system(command)
 
 
@@ -48,29 +64,9 @@ def get_df_from_silence_txt(output_file):
     df = pd.DataFrame(data)
 
     return df
+
+def generate_non_silence_time(orig_file_name, silence_file = "silence.txt"):
     
-def main():
-    path = r'D:\Projects\training_videos'
-    
-    orig_file_name = r'Career_Opportunities_In_AI.mp4'
-
-    chunk_size = r'00:05:00'
-    # split_entire_video(path, orig_file_name, chunk_size)
-
-    st_time = r'00:05:00'
-    end_time = r'00:10:00'
-    chunk_out_file = "output_" + st_time.replace(":","-") + "_" + end_time.replace(":","-") + ".mp4"
-    # cut_video_st_end_time(path, orig_file_name, st_time, end_time, chunk_out_file)
-
-    sleep(1)
-    # remove_silence_add_pauses(path, chunk_out_file)
-
-
-    # detect_silence(path, file_name = chunk_out_file)
-
-    detect_silence(path, file_name = orig_file_name)
-
-    silence_file = "silence.txt"
     df = get_df_from_silence_txt(silence_file)
     df['start'] = df['start'].astype(float)
     df['silence_duration'] = df['silence_duration'].astype(float)
@@ -111,7 +107,62 @@ def main():
     non_silence_df['duration'] = non_silence_df['end'] - non_silence_df['start']
     non_silence_df['file_name'] = orig_file_name
     # print(non_silence_df)
-    non_silence_df.to_csv('non_silence.csv')
+    return non_silence_df
+
+def join_clips():
+    pass
+    # ffmpeg -fflags +genpts+igndts -f concat -safe 0 -segment_time_metadata 1 -i vidlist.txt -c:v copy -af aselect=concatdec_select,aresample=async=1 output.mp4
+    
+def generate_clips_for_non_silence_time(video_path, non_silence_time_df):
+    # Iterate over each row in the DataFrame and generate clips
+    for index, row in non_silence_time_df.iterrows():
+        start_sec = row['start']
+        duration = row['duration']
+        file_name = row['file_name']
+        
+        # Construct output file name for the clip
+        output_file = f"{os.path.splitext(file_name)[0]}_{start_sec}_{duration}.mp4"
+
+        output_file_path = os.path.join(video_path, output_file)
+
+        # Call the function to cut the video
+        cut_video_st_end_time(video_path, file_name, start_sec, duration, output_file_path)
+
+
+
+def main():
+    path = r'D:\Projects\training_videos'
+    
+    orig_file_name = r'Career_Opportunities_In_AI.mp4'
+
+    chunk_size = r'00:05:00'
+    # split_entire_video(path, orig_file_name, chunk_size)
+
+    # st_time = 978.647438
+    # end_time = 500.78
+
+    # chunk_out_file = "output_" + str(st_time) + "_" + str(end_time) + ".mp4"
+    # cut_video_st_end_time(path, orig_file_name, st_time, end_time, chunk_out_file)
+
+    # sleep(1)
+    # remove_silence_add_pauses(path, chunk_out_file)
+
+    # detect_silence(path, file_name = chunk_out_file)
+
+    # detect_silence(path, file_name = orig_file_name)
+
+    # non_silence_time_df = generate_non_silence_time(orig_file_name)
+    # non_silence_time_df.to_csv('non_silence.csv')
+
+    non_silence_csv_path = os.path.join(r'D:\Projects\utilities', r'non_silence.csv')
+    non_silence_time_df = pd.read_csv(non_silence_csv_path)
+
+    non_silence_time_df['output_file'] = None
+
+    video_path = path
+    generate_clips_for_non_silence_time(video_path, non_silence_time_df)
+
+
 
 if __name__ == '__main__':
     main()
