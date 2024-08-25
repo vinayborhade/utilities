@@ -49,8 +49,12 @@ def remove_silence_add_pauses(path, file_name):
         os.system(command)
 
 def detect_silence(path, file_name):
+
+    output_file = f'{file_name}.txt'
+    output_file_path = os.path.join(path, output_file)
+
     if file_name.endswith(".mp4"): 
-        command = "ffmpeg -i " + os.path.join(path, file_name) + " -nostats -af silencedetect=n=-50dB:d=3 -f null - 2> silence.txt"
+        command = "ffmpeg -i " + os.path.join(path, file_name) + " -nostats -af silencedetect=n=-50dB:d=3 -f null - 2> " + output_file_path
         os.system(command)
     
 def get_df_from_silence_txt(output_file):
@@ -186,8 +190,11 @@ def main():
     # sleep(1)
     # remove_silence_add_pauses(path, chunk_out_file)
 
-    # detect_silence(path, file_name = chunk_out_file)
-
+    clip_names = ['What_is_AI','Job_Profiles_in_AI','Career_Paths','Skills_Required_for_AI','Use_cases_in_Industry','Challenges_in_career_and_how_to_overcome','Key_Takaways','Industry_Usage','About_Dataastaa_and_our_vision']
+    
+    for clip_name in clip_names:
+        detect_silence(path, file_name = clip_name + ".mp4")
+ 
     # detect_silence(path, file_name = orig_file_name)
 
     # non_silence_time_df = generate_non_silence_time(orig_file_name)
@@ -199,11 +206,11 @@ def main():
     # video_path = path
     # generate_clips_for_non_silence_time(video_path, non_silence_time_df)
 
-    custom_split_csv_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'Topics.csv')
-    custom_split_df = pd.read_csv(custom_split_csv_path)
-    custom_split_df['output_file'] = None
-    video_path = path
-    generate_clips_for_custom_split_time(video_path, custom_split_df)
+    # custom_split_csv_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'Topics.csv')
+    # custom_split_df = pd.read_csv(custom_split_csv_path)
+    # custom_split_df['output_file'] = None
+    # video_path = path
+    # generate_clips_for_custom_split_time(video_path, custom_split_df)
 
 
 
