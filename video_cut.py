@@ -146,13 +146,13 @@ def generate_clips_for_non_silence_time(video_path, non_silence_time_df):
         sleep(1)
         cut_video_st_duration_time(video_path, file_name, start_sec, duration, output_file_path)
 
+# Function to convert hh:mm:ss to seconds
+def time_to_seconds(time_str):
+    # print(time_str, type(time_str))
+    h, m, s = map(int, time_str.split(':'))
+    return h * 3600 + m * 60 + s
+
 def generate_clips_for_custom_split_time(video_path, custom_split_time_df):
-
-    # Function to convert hh:mm:ss to seconds
-    def time_to_seconds(time_str):
-        h, m, s = map(int, time_str.split(':'))
-        return h * 3600 + m * 60 + s
-
     # Apply the function to calculate duration
     custom_split_time_df['start_sec'] = custom_split_time_df['start'].apply(time_to_seconds)
     custom_split_time_df['end_sec'] = custom_split_time_df['end'].apply(time_to_seconds)
@@ -186,6 +186,27 @@ def generate_silences_df_for_clips(path, clip_names):
 def detect_silences_all_clips(path, clip_names):
     for clip_name in clip_names:
         detect_silence(path, file_name = clip_name + ".mp4")
+
+def speed_audio_video_all_clips(path, clip_names):
+    for clip_name in clip_names:
+        speed_audio_video(path, file_name = clip_name + ".mp4")
+
+def speed_audio_video(path, file_name):
+    output_file = f'speedup_{file_name}'
+    output_file_path = os.path.join(path, output_file)
+
+    if file_name.endswith(".mp4"): 
+        command = 'ffmpeg -i ' + os.path.join(path, file_name) + ' -vf "setpts=0.8*PTS" -af "atempo=1.25" ' + output_file_path
+        os.system(command)
+
+def image_overaly(path, file_name, image_name):
+    output_file = f'overlay_{file_name}'
+    output_file_path = os.path.join(path, output_file)
+
+    if file_name.endswith(".mp4"): 
+        command = 'ffmpeg -i ' + os.path.join(path, file_name) + ' -i ' + os.path.join(path, image_name) + ' -filter_complex "overlay=210:110" ' +  output_file_path
+        os.system(command)
+    
     
 def main():
     path = r'D:\Projects\training_videos\Career_Opportunities_In_AI'
@@ -204,13 +225,12 @@ def main():
     # sleep(1)
     # remove_silence_add_pauses(path, chunk_out_file)
 
-    clip_names = ['What_is_AI','Job_Profiles_in_AI','Career_Paths','Skills_Required_for_AI','Use_cases_in_Industry','Challenges_in_career_and_how_to_overcome','Key_Takaways','Industry_Usage','About_Dataastaa_and_our_vision']
-    
+    # clip_names = ['What_Is_AI','Job_Profiles_In_AI','Career_Paths','Skills_Required_For_AI','AI_Use_Cases_In_Industry','Challenges_In_AI_Career_And_How_To_Overcome','Key_Takaways_For_Making_Career_In_AI','AI_Industry_Usage','About_Dataastaa_And_Our_Vision']
     # detect_silences_all_clips(path, clip_names)
         
-    df_silences = generate_silences_df_for_clips(path, clip_names)
-    silences_df_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'All_Clip_Silences.csv')
-    df_silences.to_csv(silences_df_path)
+    # df_silences = generate_silences_df_for_clips(path, clip_names)
+    # silences_df_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'All_Clip_Silences.csv')
+    # df_silences.to_csv(silences_df_path)
 
  
     # detect_silence(path, file_name = orig_file_name)
@@ -224,12 +244,17 @@ def main():
     # video_path = path
     # generate_clips_for_non_silence_time(video_path, non_silence_time_df)
 
-    # custom_split_csv_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'Topics.csv')
-    # custom_split_df = pd.read_csv(custom_split_csv_path)
-    # custom_split_df['output_file'] = None
-    # video_path = path
-    # generate_clips_for_custom_split_time(video_path, custom_split_df)
+    custom_split_csv_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'Career_Paths.csv')
+    custom_split_df = pd.read_csv(custom_split_csv_path)
+    video_path = path
+    generate_clips_for_custom_split_time(video_path, custom_split_df)
 
+    # clip_names = ['What_Is_AI','Job_Profiles_In_AI','Career_Paths','Skills_Required_For_AI','AI_Use_Cases_In_Industry','Challenges_In_AI_Career_And_How_To_Overcome','Key_Takaways_For_Making_Career_In_AI','AI_Industry_Usage','About_Dataastaa_And_Our_Vision']
+    # speed_audio_video_all_clips(path, clip_names)
+
+    # video_name = 'Neural_Network_And_Resurgence_Of_AI.mp4'
+    # overlay_image = 'NN_overlay.png'
+    # image_overaly(path, video_name, overlay_image)
 
 
 if __name__ == '__main__':
