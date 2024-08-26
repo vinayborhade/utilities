@@ -50,16 +50,18 @@ def remove_silence_add_pauses(path, file_name):
 
 def detect_silence(path, file_name):
 
-    output_file = f'{file_name}.txt'
+    output_file = f'Silences_{file_name}.txt'
     output_file_path = os.path.join(path, output_file)
 
     if file_name.endswith(".mp4"): 
         command = "ffmpeg -i " + os.path.join(path, file_name) + " -nostats -af silencedetect=n=-50dB:d=3 -f null - 2> " + output_file_path
         os.system(command)
     
-def get_df_from_silence_txt(output_file):
+def get_df_from_silence_txt(path, file_name):
+    output_file = f'Silences_{file_name}.txt'
+    output_file_path = os.path.join(path, output_file)
     # Read the output from the file
-    with open(output_file, 'r') as file:
+    with open(output_file_path, 'r') as file:
         output = file.read()
 
     # Parse the output
@@ -172,7 +174,19 @@ def generate_clips_for_custom_split_time(video_path, custom_split_time_df):
         # cut_video_st_end_time(video_path, file_name, start_sec, end_sec, output_file_path)
         cut_video_st_duration_time(video_path, file_name, start_sec, duration, output_file_path)
 
+def generate_silences_df_for_clips(path, clip_names):
+    df_lst = []
+    for clip_name in clip_names:
+        df = get_df_from_silence_txt(path, file_name = clip_name + ".mp4")
+        df['file_name'] = clip_name
+        df_lst.append(df)
+    df_silences = pd.concat(df_lst)
+    return df_silences
 
+def detect_silences_all_clips(path, clip_names):
+    for clip_name in clip_names:
+        detect_silence(path, file_name = clip_name + ".mp4")
+    
 def main():
     path = r'D:\Projects\training_videos\Career_Opportunities_In_AI'
     
@@ -192,8 +206,12 @@ def main():
 
     clip_names = ['What_is_AI','Job_Profiles_in_AI','Career_Paths','Skills_Required_for_AI','Use_cases_in_Industry','Challenges_in_career_and_how_to_overcome','Key_Takaways','Industry_Usage','About_Dataastaa_and_our_vision']
     
-    for clip_name in clip_names:
-        detect_silence(path, file_name = clip_name + ".mp4")
+    # detect_silences_all_clips(path, clip_names)
+        
+    df_silences = generate_silences_df_for_clips(path, clip_names)
+    silences_df_path = os.path.join(r'D:\Projects\training_videos\Career_Opportunities_In_AI', r'All_Clip_Silences.csv')
+    df_silences.to_csv(silences_df_path)
+
  
     # detect_silence(path, file_name = orig_file_name)
 
